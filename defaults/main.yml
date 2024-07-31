@@ -1,0 +1,5 @@
+---
+# defaults file for nfs_server
+servers:
+  - hostname: "host"
+    ilo_baseuri: "0.0.0.0"

@@ -1,0 +1,33 @@
+---
+# tasks file for nfs_server
+- name: Ensure NFS utilities are installed.
+  apt:
+    name:
+      - nfs-common
+      - nfs-kernel-server
+    state: present
+
+- name: Ensure directories to export exist
+  file:
+    path: "/nfs_server/isos/"
+    state: directory
+
+- name: Copy exports file.
+  template:
+    src: exports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0777
+
+- name: reload nfs
+  command: 'exportfs -ra'
+
+- name: Copy iso file to directory
+  copy:
+    src: "isos/{{ item.hostname }}.iso"
+    dest: "/nfs_server/isos/{{ item.hostname }}.iso"
+  loop: "{{ servers }}"
+
+- name: Ensure nfs is running.
+  service: "name={{ nfs_server_daemon }} state=started enabled=yes"

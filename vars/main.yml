@@ -1,0 +1,3 @@
+---
+# vars file for nfs_server
+nfs_server_daemon: "nfs-kernel-server"
